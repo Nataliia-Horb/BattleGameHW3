@@ -1,7 +1,5 @@
 package org.example;
 
-import com.sun.tools.javac.Main;
-
 /*
 Участвует два игрока. У каждого игрока изначально 100 очков здоровья.
 Игра начинается с бросания жребия: если сгенерированное псевдослучайное число меньше 0,5 - первый удар наносит первый
@@ -24,42 +22,57 @@ import com.sun.tools.javac.Main;
 
 Игра завершается, когда количество очков здоровья одного из игроков достигнет 0.
 
+First level: Модифицировать код реализации поставленной в прошлый раз задачи со следующими изменениями:
+Существует два типа игрока:
+У первого типа игрока изначально количество единиц суперсилы равно 5, но для получения новой единицы суперсилы необходимо нанести 3 точных удара в свой ход подряд.
+У игрока второго типа изначально 3 единицы суперсилы, но для получения новой единицы суперсилы необходимо нанести 2 точных удара по сопернику в в свой ход подряд.
+В каждой игре один из игроков - игрок типа 1, а второй типа 2 (игроки в рамках одной игры всегда разных типов).
+Реализовать два различных класса для двух типов игроков, используя наследования от базового класса игрока.
+
+
 */
 public class Game implements GameConstants {
+    private static int numberOfTotalHitsPlayers;
 
     public static void main(String[] args) {
-        play();
-    }
 
-    public static void play() {
-        Player player1 = new Player("Gladiator");
-        Player player2 = new Player("Night Racer");
+        Player player1 = new PlayerType1("Gladiator");
+        Player player2 = new PlayerType2("Night Racer");
         Statistics statisticsPlayer1 = new Statistics();
         Statistics statisticsPlayer2 = new Statistics();
         Stage stage = new Stage();
+        play(player1, player2, statisticsPlayer1, statisticsPlayer2, stage);
+    }
+
+    public static void play(Player player1, Player player2, Statistics statisticsPlayer1,
+                            Statistics statisticsPlayer2, Stage stage) {
+
         if (Math.random() < 0.5) {
-            implementGame(player1, player2, statisticsPlayer1, statisticsPlayer2, stage);
+            makeGame(player1, player2, statisticsPlayer1, statisticsPlayer2, stage);
         } else {
-            implementGame(player2, player1, statisticsPlayer2, statisticsPlayer1, stage);
+            makeGame(player2, player1, statisticsPlayer2, statisticsPlayer1, stage);
         }
     }
 
-    private static void implementOneHit(Player player1, Player player2, Statistics statisticsPlayer1,
-                                        Statistics statisticsPlayer2, Stage stage, String color) {
+    private static void makeOneHit(Player player1, Player player2, Statistics statisticsPlayer1,
+                                   Statistics statisticsPlayer2, Stage stage, String color) {
         player1.hitEnemy();
         statisticsPlayer1.count(player1);
-        statisticsPlayer1.printStatistics(player1);
+        numberOfTotalHitsPlayers++;
         player2.blowResponse(player1);
-        stage.drawColor(player2, color);
+        stage.drawColor(player1, color);
+
+        // Вывод на экран результатов боя пошагово, для самопроверки
+        statisticsPlayer1.printStatistics(player1);
         statisticsPlayer2.printHealthAndSuperPower(player2);
 
     }
 
-    private static void implementGame(Player player1, Player player2, Statistics statisticsPlayer1,
-                                      Statistics statisticsPlayer2, Stage stage) {
+    private static void makeGame(Player player1, Player player2, Statistics statisticsPlayer1,
+                                 Statistics statisticsPlayer2, Stage stage) {
         do {
-            implementOneHit(player1, player2, statisticsPlayer1, statisticsPlayer2, stage, COLOR_PLAYER1);
-            implementOneHit(player2, player1, statisticsPlayer2, statisticsPlayer1, stage, COLOR_PLAYER2);
+            makeOneHit(player1, player2, statisticsPlayer1, statisticsPlayer2, stage, COLOR_PLAYER1);
+            makeOneHit(player2, player1, statisticsPlayer2, statisticsPlayer1, stage, COLOR_PLAYER2);
         }
         while (player1.getHealth() > 0 && player2.getHealth() > 0);
         printGameResultsNotification(player1, player2, statisticsPlayer1, statisticsPlayer2, stage);
@@ -75,8 +88,7 @@ public class Game implements GameConstants {
             stage.victoryNotification(player1.getName());
         }
 
-        System.out.println((statisticsPlayer1.getNumberOfTotalHitsPlayer() +
-                statisticsPlayer2.getNumberOfTotalHitsPlayer()) + " Hits in total per Game");
+        System.out.println(numberOfTotalHitsPlayers + " Hits in total per Game");
         statisticsPlayer1.printStatistics(player1);
         statisticsPlayer2.printStatistics(player2);
     }

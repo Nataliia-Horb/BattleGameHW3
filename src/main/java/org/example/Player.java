@@ -3,22 +3,34 @@ package org.example;
 import lombok.Data;
 
 @Data
-public class Player implements GameConstants {
+public abstract class Player implements GameConstants {
     private String name;
     private int health;
     private int superPower;
-
-    private boolean isEffectiveBlow;
-    private boolean isNewSuperPower;
-    private boolean isLossHealth;
     private int effectiveBlowsCounter;
+    private int limitForOneNeuSuperpower;
+    private boolean isEffectiveBlow;
+    private boolean isLossHealth;
+    private boolean isNewSuperPower;
 
 
-    public Player(String name) {
+    public Player(String name, int superPower, int limitForOneNeuSuperpower) {
         this.name = name;
         this.health = PLAYER_HEALTH_AT_START;
-        this.superPower = PLAYER_SUPER_POWER_AT_START;
-        this.effectiveBlowsCounter = 0;
+        this.superPower = superPower;
+        this.limitForOneNeuSuperpower = limitForOneNeuSuperpower;
+    }
+
+    public void hitEnemy() {
+        System.out.println("Hit");
+        this.isEffectiveBlow = Math.random() < 0.4 ? true : false;
+        if (isEffectiveBlow) {
+            this.effectiveBlowsCounter++;
+            countNewSuperPower();
+        } else {
+            this.effectiveBlowsCounter = 0;
+            this.isNewSuperPower = false;
+        }
     }
 
     public void blowResponse(Player enemy) {
@@ -35,24 +47,13 @@ public class Player implements GameConstants {
         }
     }
 
-    private void countNewSuperPower() {
-        if (this.effectiveBlowsCounter == 2) {
-            this.effectiveBlowsCounter = 0;
+    public void countNewSuperPower() {
+        if (this.effectiveBlowsCounter == limitForOneNeuSuperpower) {
             this.superPower++;
+            this.effectiveBlowsCounter = 0;
             this.isNewSuperPower = true;
         } else {
-            isNewSuperPower = false;
-        }
-    }
-
-    public void hitEnemy() {
-        System.out.println("Hit");
-        this.isEffectiveBlow = Math.random() < 0.4 ? true : false;
-        if (isEffectiveBlow) {
-            this.effectiveBlowsCounter++;
-            countNewSuperPower();
-        } else {
-            this.effectiveBlowsCounter = 0;
+            this.isNewSuperPower = false;
         }
     }
 }

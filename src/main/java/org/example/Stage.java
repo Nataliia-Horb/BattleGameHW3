@@ -1,7 +1,5 @@
 package org.example;
 
-import java.lang.management.PlatformLoggingMXBean;
-
 public class Stage {
 
     public void drawColor(Player player, String color) {
