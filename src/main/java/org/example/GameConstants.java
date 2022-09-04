@@ -8,4 +8,5 @@ public interface GameConstants {
     int PLAYER2_LIMIT_FOR_NEU_SUPERPOWER = 2;
     String COLOR_PLAYER1 = "red";
     String COLOR_PLAYER2 = "blue";
+
 }

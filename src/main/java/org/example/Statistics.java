@@ -16,7 +16,6 @@ public class Statistics {
         }
     }
 
-
     public void printStatistics(Player player) {
         System.out.println("Effective Hits of " + player.getName() + ": " + numberOfEffectiveHitsPlayer);
         System.out.println("New Super Power of " + player.getName() + ": " + numberNewSuperPowerPlayer);

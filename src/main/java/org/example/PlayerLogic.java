@@ -1,2 +1,5 @@
-package org.example;public interface PlayerLogic {
+package org.example;
+
+public interface PlayerLogic {
+  void hitEnemy();
 }
