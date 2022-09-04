@@ -2,7 +2,8 @@ package org.example;
 
 import lombok.Data;
 
-public abstract class Plauer implements GameConstants  {
+@Data
+public abstract class Player implements GameConstants  {
     private String name;
     private int health;
     private int superPower;

@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="BattleGameHW3Variant" />
         <module name="BattleGameHW2" />
+        <module name="BattleGameHW3" />
       </profile>
     </annotationProcessing>
   </component>
